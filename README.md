@@ -93,6 +93,7 @@ exports.uploadFile = function(req,res,next){
 You can use `.before` and `.after` function for the following response methods
 
 * res.send(responseBody)
+* res.json(responseBody)
 * res.jsonp(responseBody)
 * res.sendStatus(responseBody)
 * res.end(responseBody)
