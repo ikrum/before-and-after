@@ -49,15 +49,22 @@ module.exports = function(req,res,next){
 	}
 
 
+	// individual response function
 	res.end = function(){
+		res.rt_before_func_();
 		res.rt_end_.apply(this,arguments);
+		res.rt_after_func_();
 	}
 	
 	res.sendFile = function(){
+		res.rt_before_func_();
 		res._sendFile.apply(this, arguments);
+		res.rt_after_func_();
 	}
 	res.render = function(){
+		res.rt_before_func_();
 		res._render.apply(this, arguments);
+		res.rt_after_func_();
 	}
 	
 
