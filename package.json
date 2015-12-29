@@ -1,0 +1,26 @@
+{
+  "name": "before-and-after",
+  "version": "1.0.0",
+  "description": "Do some tasks before and after express response is sent",
+  "main": "index.js",
+  "scripts": {},
+  "keywords": [
+    "express",
+    "before",
+    "after",
+    "tasks"
+  ],
+  "author": "Ikrum Hossain <ikrum.bd@gmail.com> (http://apikothon.com)",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ikrum/before-and-after.git"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "content-type": "^1.0.1"
+  },
+  "bugs": {
+    "url": "https://github.com/ikrum/before-and-after/issues"
+  },
+  "homepage": "https://github.com/ikrum/before-and-after#readme"
+}
