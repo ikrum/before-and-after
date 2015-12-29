@@ -6,9 +6,13 @@ npm install before-and-after
 
 ## Usage
 
+Add the middleware
+```
 var bafMiddleware = require('before-and-after');
 app.use(bafMiddleware);
+```
 
+Use from anywhere
 ```
 res.before(function(){
   console.log("Before response is sent");
