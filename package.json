@@ -1,6 +1,6 @@
 {
   "name": "before-and-after",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Do some tasks before and after express response is sent",
   "main": "index.js",
   "scripts": {},
