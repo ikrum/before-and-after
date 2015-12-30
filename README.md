@@ -96,6 +96,5 @@ You can use `.before` and `.after` function for the following response methods
 * res.json(responseBody)
 * res.jsonp(responseBody)
 * res.sendStatus(responseBody)
-* res.end(responseBody)
 * res.sendFile(responseBody)
 * res.render(responseBody)
