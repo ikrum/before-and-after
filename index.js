@@ -65,12 +65,14 @@ module.exports = function(req,res,next){
 	// add new functions
 
 	res.before = function(callback){
-		if(callback =="undefined" || !isFunction(callback)) return console.error("before callback is not a function");
+		if(callback =="undefined") return;
+		if(!isFunction(callback)) return console.error("before callback is not a function");
 		res.rt_before_func_ = callback;
 	}
 
 	res.after = function(callback){
-		if(callback =="undefined" || !isFunction(callback)) return console.error("after callback is not a function");
+		if(callback =="undefined") return;
+		if(!isFunction(callback)) return console.error("after callback is not a function");
 		res.rt_after_func_ = callback;
 	}
 
