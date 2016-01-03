@@ -52,8 +52,7 @@ res._update("links.$.newField", "new value");
 ```
 NOTE: Like _exclude function, only one iterator sign ($) is supported by _update
 
-###### Recommendation about using before tasks
-It's recommended to avoid nested before functions
+###### It's recommended to avoid nested before tasks. Before tasks should be defined before the request is already sent.
 
 ```
 // don not use like this, bcoz by default all those three functions will be 
@@ -63,6 +62,10 @@ res._before(function(){
    res._update("foo", "bar");
    res._exclude(["a","b","c"]);
 })
+
+// The follwoing example won't work
+res.send("response already sent");
+res._exclude(['foo']);
 ```
 
 ## After tasks
@@ -75,7 +78,20 @@ res._after(function(){
 });
 ```
 
-### Example
+### Multiple before-after tasks
+
+You can use before and after tasks multiple time. Each task you are adding will be executed explicitly in order.
+```
+res._before(function(){}); 
+res._exclude['foo','bar'];
+//...... your code here ...
+
+// use this again
+res._before(function(){ /* Another task here*/ })
+res._exclude['foo','bar'];.
+```
+
+### A complete example
 
 For upload file request, you need to remove the temporary file from temp. 
 
