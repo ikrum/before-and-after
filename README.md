@@ -1,5 +1,5 @@
 # before-and-after
-Express package for response preprocessing, postprocessing. Include, exclued, filter, update fields & dump before and after job
+Express package for response preprocessing, postprocessing. Include, exclude, filter, update fields & dump before and after job
 
 # Install
 ```npm install before-and-after```
@@ -25,9 +25,9 @@ res._before(function(){
 ```
 #### 2) _exclude
 
-You may find dificuly with exluding mongoose fields. Filter your response by removing sensitive or unncessary fields from response. All you need to pass the array of field or object path to the _exclue() function like following example.
+You may find difficulty with excluding mongoose fields. Filter your response by removing sensitive or unnecessary fields from response. All you need to pass the array of field or object path to the _exclue() function like following example.
 ```
-res._exclude(['__id','__V', 'password', 'user.serectField', 'file.__id', 'links.$.source']);
+res._exclude(['__id','__V', 'password', 'user.secretField', 'file.__id', 'links.$.source']);
 ```
 To delete from array use $ sign for iterator. The iterator will be replaced by the array index like:
 ```
@@ -48,16 +48,16 @@ res._update("token", getToken());
 res._update("data", {foo: "bar"});
 
 // add or update field at all array elements
-res._update("links.$.newFiled", "new value");
+res._update("links.$.newField", "new value");
 ```
 NOTE: Like _exclude function, only one iterator sign ($) is supported by _update
 
 ###### Recommendation about using before tasks
-It's recomended to avoid nested before functions
+It's recommended to avoid nested before functions
 
 ```
 // don not use like this, bcoz by default all those three functions will be 
-// exucuted explicitly before the response is sent.
+// executed explicitly before the response is sent.
 
 res._before(function(){
    res._update("foo", "bar");
@@ -88,7 +88,7 @@ exports.uploadFile = function(req,res,next){
 	upload(req.files.file, function(error, result)){
 		if(error) return next(error); // // you need to unlink file
 
-		res.status(200).json({status:200, message: "File upload successfull"});
+		res.status(200).json({status:200, message: "File upload successful"});
 	}
 }
 ```
@@ -129,7 +129,7 @@ exports.uploadFile = function(req,res,next){
 	upload(req.files.file, function(error, result)){
 		if(error) return next(error);
 
-		res.status(200).json({status:200, message: "File upload successfull"});
+		res.status(200).json({status:200, message: "File upload successful"});
 	}
 }
 ```
