@@ -136,6 +136,8 @@ exports.uploadFile = function(req,res,next){
     res._before(function(){
 		res.locals.variable = "some content"
     });
+    
+    // remove the temp file after everything is done
     res._after(function(){
         fs.unlink(req.files.file.path, function(err){});
         // add more task you want
@@ -148,7 +150,10 @@ exports.uploadFile = function(req,res,next){
     // File will be remove by the after task
     if(!req.files) return next("File payload required"); 
     if(!isImage(req.files.file)) return next("Invalid image file");
+    
+    
     upload(req.files.file, function(error, result)){
+    
     	// File will be remove by the after task
         if(error) return next(error);
 
@@ -180,7 +185,7 @@ You can use `._before` and `._after` function for the following response methods
 * res.sendFile(responseBody)
 * res.render(responseBody)
 
-`_.update` and `_.exlude` is only for json response using: `res.json()` and `res.jsonp()`
+`._update` and `._exclude` is only for json response using: `res.json()` and `res.jsonp()`
 
 
 Feel free to contact me at: ikrum.bd@gmail.com
