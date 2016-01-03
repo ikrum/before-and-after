@@ -28,7 +28,37 @@ res._before(function(){
 
 You may find difficulty with excluding mongoose fields. Filter your response by removing sensitive or unnecessary fields from response. All you need to pass the array of field or object path to the `_exclue()` function like following example.
 ```
-res._exclude(['__id','__V', 'password', 'user.secretField', 'file.__id', 'links.$.source']);
+// Consider this is an example json
+var json = {
+	__id: "random_id",
+	password: "9t3n49tvo9tu",
+	__V: 0,
+	name: "ikrum",
+	email: "admin@ikrum.net",
+	file: {
+		__id: "87hryhyr983y39",
+		fileName : "input.mp4",
+		secretField: "secret value",
+		info: {
+			title: "my title"
+		}
+	},
+	links : [
+		{
+			id: 34,
+			source: "facebook",
+			url: "a link here"
+		},
+		{
+			id: 36,
+			source: "google",
+			url: "a link here here"
+		},
+	]
+}
+
+
+res._exclude(['__id','__V', 'password', 'file.__id', 'file.secretField', 'links.$.source']);
 ```
 To delete from array use `$` sign for iterator. The iterator will be replaced by the array index like:
 ```
