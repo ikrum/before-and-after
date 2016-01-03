@@ -88,7 +88,7 @@ exports.uploadFile = function(req,res,next){
 }
 ```
 
-## Limitation
+## Limitations
 
 You can use `.before` and `.after` function for the following response methods
 

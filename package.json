@@ -1,23 +1,30 @@
 {
   "name": "before-and-after",
-  "version": "1.0.5",
-  "description": "Do some tasks before and after express response is sent",
+  "version": "2.1.0",
+  "description": "Express package for response preprocessing, postprocessing. Include, exclued, filter, update fields & dump before and after job",
   "main": "index.js",
   "scripts": {},
   "keywords": [
     "express",
     "before",
     "after",
-    "tasks"
+    "tasks",
+    "filter",
+    "exclued",
+    "response",
+    "preprocessing",
+    "postprocessing"
   ],
-  "author": "Ikrum Hossain <ikrum.bd@gmail.com> (http://apikothon.com)",
+  "author": "Ikrum Hossain <ikrum.bd@gmail.com> (http://ikrum.net)",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/ikrum/before-and-after.git"
   },
   "license": "MIT",
   "dependencies": {
-    "content-type": "^1.0.1"
+    "content-type": "^1.0.1",
+    "etag": "^1.7.0",
+    "object-path": "^0.9.2"
   },
   "bugs": {
     "url": "https://github.com/ikrum/before-and-after/issues"
