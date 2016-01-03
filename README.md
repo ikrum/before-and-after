@@ -1,35 +1,81 @@
 # before-and-after
-do some task before and after express response is sent
+Express package for response preprocessing, postprocessing. Include, exclued, filter, update fields & dump before and after job
 
-## Install
-npm install before-and-after
+# Install
+```npm install before-and-after```
 
-## Usage
+# Usage
 
-Add the middleware
+By adding the middleware into your app you will get four underscore functions [ _before, _after, _exclude, _update] attached with res object.
 ```
 var bafMiddleware = require('before-and-after');
 app.use(bafMiddleware);
 ```
 
-Use from anywhere
+##Before tasks
+
+Before tasks will be executed before the response is delivered. Using before tasks you can dump your common tasks, pre-process and filter express response. 
+#### 1) _before
+
+Write your own preprocessing tasks by passing a call back into res._before()
 ```
-res.before(function(){
+res._before(function(){
   console.log("Before response is sent");
 });
+```
+#### 2) _exclude
 
-res.after(function(){
-  console.log("After response is sent");
+You may find dificuly with exluding mongoose fields. Filter your response by removing sensitive or unncessary fields from response. All you need to pass the array of field or object path to the _exclue() function like following example.
+```
+res._exclude(['__id','__V', 'password', 'user.serectField', 'file.__id', 'links.$.source']);
+```
+To delete from array use $ sign for iterator. The iterator will be replaced by the array index like:
+```
+// links.$.source
+links[0].source
+links[1].source
+....
+links[i].source
+```
+NOTE: For now only one iterator sign ($) is supported by this module. so ``'links.$.sources.$.type'`` won't work
+
+#### 3) _update
+To add new fields on the response or update existing fields you need to pass the object path and value to the _update function.
+
+```
+// add new field or update existing field
+res._update("token", getToken());
+res._update("data", {foo: "bar"});
+
+// add or update field at all array elements
+res._update("links.$.newFiled", "new value");
+```
+NOTE: Like _exclude function, only one iterator sign ($) is supported by _update
+
+###### Recommendation about using before tasks
+It's recomended to avoid nested before functions
+
+```
+// don not use like this, bcoz by default all those three functions will be 
+// exucuted explicitly before the response is sent.
+
+res._before(function(){
+   res._update("foo", "bar");
+   res._exclude(["a","b","c"]);
+})
+```
+
+## After tasks
+If you need to do some tasks that need to be done after response is sent you can use the _after() function like the following example
+
+```
+res._after(function(){
+  console.log("After response is already sent");
   cleanTrace(); // do some tasks
 });
 ```
 
 ### Example
-
-
-
-
-
 
 For upload file request, you need to remove the temporary file from temp. 
 
@@ -98,3 +144,6 @@ You can use `.before` and `.after` function for the following response methods
 * res.sendStatus(responseBody)
 * res.sendFile(responseBody)
 * res.render(responseBody)
+
+
+Feel free to contact me at: ikrum.bd@gmail.com
