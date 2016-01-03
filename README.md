@@ -124,60 +124,48 @@ res._exclude['foo','bar'];.
 
 ### A complete example
 
-For upload file request, you need to remove the temporary file from temp. 
+For upload file request the example will accomplish the following tasks
+*) Add before and after tasks
+*) For upload failed or success, in every case we have to delete the temp file.
+*) Add or Filter some response fields
 
 ```
 exports.uploadFile = function(req,res,next){
 
-	if(!req.files) return next("File payload required"); // you need to unlink file
-	if(!isImage(req.files.file)) return next("Invalid image file"); // // you need to unlink file
+    // define your tasks
+    res._before(function(){
+		res.locals.variable = "some content"
+    });
+    res._after(function(){
+        fs.unlink(req.files.file.path, function(err){});
+        // add more task you want
+    });
 
-	upload(req.files.file, function(error, result)){
-		if(error) return next(error); // // you need to unlink file
+    // add an example documentation field for error
+    res._update("documentation", "http://api.com/docs/1234");
 
-		res.status(200).json({status:200, message: "File upload successful"});
-	}
-}
-```
+    // On each error you don't have to remove the temp file
+    // File will be remove by the after task
+    if(!req.files) return next("File payload required"); 
+    if(!isImage(req.files.file)) return next("Invalid image file");
+    upload(req.files.file, function(error, result)){
+    	// File will be remove by the after task
+        if(error) return next(error);
 
-You may consider to write unlink code for each error condition.
+        // error not happened, so delete the documentation field from response
+        res._exclude(['documentation']);
 
+        // insert response time
+        res._update('time', Date.now());
 
-```
-if(!req.files){
-	fs.unlink(req.files.file.path, function(err){});
-	next("File payload required");
-};
-
-if(!isImage(req.files.file)){
-	fs.unlink(req.files.file.path, function(err){});
-	next("Invalid image file");
-};
-
-```
-
-Situation like this you find this module is useful. You can define what will happen before and after the response is sent. At the example I want to unlink temp file after the response is sent, doesn't matter if the response is 200, 400 or whatever.
-
-```
-exports.uploadFile = function(req,res,next){
-
-	// define your task before response is returned.
-	res.after(function(){
-		fs.unlink(req.files.file.path, function(err){});
-		// add more task you want
-	});
+        // remove some fields from file info for the given json
+        // {status:200, message: "string message", data: {resultOject}, time: time}
+        res._exclude(['data.__id', 'data.user.password', 'data.user.roles.$.accessKey']);
 
 
-	// now forget about the file unlink
-
-	if(!req.files) return next("File payload required"); 
-	if(!isImage(req.files.file)) return next("Invalid image file"); 
-
-	upload(req.files.file, function(error, result)){
-		if(error) return next(error);
-
-		res.status(200).json({status:200, message: "File upload successful"});
-	}
+        // File will be remove by the after task
+        res.status(200).json({status:200, message: "File upload successful", data: result});
+    }
 }
 ```
 
@@ -193,7 +181,6 @@ You can use `._before` and `._after` function for the following response methods
 * res.render(responseBody)
 
 `_.update` and `_.exlude` is only for json response using: `res.json()` and `res.jsonp()`
-* 
 
 
 Feel free to contact me at: ikrum.bd@gmail.com
