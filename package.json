@@ -1,7 +1,7 @@
 {
   "name": "before-and-after",
   "version": "2.1.0",
-  "description": "Express package for response preprocessing, postprocessing. Include, exclued, filter, update fields & dump before and after job",
+  "description": "Express package for response preprocessing, postprocessing. Include, exclude, filter, update fields & dump before and after job",
   "main": "index.js",
   "scripts": {},
   "keywords": [
@@ -10,7 +10,7 @@
     "after",
     "tasks",
     "filter",
-    "exclued",
+    "exclude",
     "response",
     "preprocessing",
     "postprocessing"
