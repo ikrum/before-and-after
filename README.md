@@ -130,8 +130,11 @@ res.exclude['foo','bar'];.
 ### A complete example
 
 For upload file request the example will accomplish the following tasks
+
 *) Add before and after tasks
+
 *) For upload failed or success, in every case we have to delete the temp file.
+
 *) Add or Filter some response fields
 
 ```
