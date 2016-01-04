@@ -18,7 +18,7 @@ Before tasks will be executed before the response is delivered. Using before tas
 
 #### 1) before
 
-Write your own preprocessing tasks by passing a call back into `res.before()`
+Write your own preprocessing tasks by passing a callback into `res.before()`
 ```
 res.before(function(){
   console.log("Before response is sent");
@@ -26,9 +26,9 @@ res.before(function(){
 ```
 #### 2) exclude
 
-To exclude fileds from your response this function can be very useful. Filter your response by removing sensitive or unnecessary fields any time. All you need to pass the array of field or object path to the `_exclue()` function like following example.
+To exclude fileds from your response this function can be very useful. Filter your response by removing sensitive or unnecessary fields any time. All you need to pass the array of field or object path to the `exclue()` function like following example.
 ```
-// Consider this is an example json
+// Consider the example json response
 var json = {
 	__id: "random_id",
 	password: "9t3n49tvo9tu",
@@ -38,6 +38,7 @@ var json = {
 	file: {
 		__id: "87hryhyr983y39",
 		fileName : "input.mp4",
+        token: "Random token"
 		secretField: "secret value",
 		info: {
 			title: "my title"
@@ -59,6 +60,10 @@ var json = {
 
 
 res.exclude(['__id','__V', 'password', 'file.__id', 'file.secretField', 'links.$.source']);
+
+// call again whenever you need.
+res.exclude(['token']);
+
 ```
 To delete from array use `$` sign for iterator. The iterator will be replaced by the array index like:
 ```
@@ -81,7 +86,7 @@ res.update("data", {foo: "bar"});
 // add or update field at all array elements
 res.update("links.$.newField", "new value");
 ```
-NOTE: Like `exclude` function, only one iterator sign `$` is supported by update
+NOTE: Like `exclude()` function, only one iterator sign `$` is supported by update
 
 ###### It's recommended to avoid nested before tasks. Before tasks should be defined before the request is already sent.
 
@@ -176,16 +181,19 @@ exports.uploadFile = function(req,res,next){
 
 ## Limitations
 
-You can use `.before` and `.after` function for the following response methods
+You can use `.before()` and `.after()` function for the following response methods
 
-* res.send(responseBody)
-* res.json(responseBody)
-* res.jsonp(responseBody)
-* res.sendStatus(responseBody)
-* res.sendFile(responseBody)
-* res.render(responseBody)
+* res.send(body)
+* res.json(body)
+* res.jsonp(body)
+* res.sendStatus(body)
+* res.sendFile(body)
+* res.render(body)
 
-`.update` and `.exclude` is only for json response using: `res.json()` and `res.jsonp()`
+`.update()` and `.exclude()` is only for json response using:
+
+* res.json(jsonObj)
+* res.jsonp(jsonObj)
 
 
 Feel free to contact me at: ikrum.bd@gmail.com
