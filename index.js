@@ -200,19 +200,19 @@ module.exports = function(req,res,next){
 
 //	******************  New _functions for developers ****************
 
-	res._before = function(callback){
+	res.before = function(callback){
 		if(callback =="undefined") return;
 		if(!isFunction(callback)) return console.error("before callback is not a function");
 		baf_before_func_.push(callback);
 	}
 
-	res._after = function(callback){
+	res.after = function(callback){
 		if(callback =="undefined") return;
 		if(!isFunction(callback)) return console.error("after callback is not a function");
 		baf_after_func_.push(callback);
 	}
 
-	res._exclude = function(pathArray){
+	res.exclude = function(pathArray){
 		if(!Array.isArray(pathArray)) return;
 
 		for(index in pathArray){
@@ -221,7 +221,7 @@ module.exports = function(req,res,next){
 	}
 
 	// @param value could be any type: int, string, object etc
-	res._update = function(path, value){
+	res.update = function(path, value){
 		if(typeof path != "string" || typeof value == "undefined")
 			return next(new Error("Invalid function parameter : _update(objectPath, objectValue)"));
 

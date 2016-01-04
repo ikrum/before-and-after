@@ -1,6 +1,6 @@
 {
   "name": "before-and-after",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "description": "Express package for response preprocessing, postprocessing. Include, exclude, filter, update fields & dump before and after job",
   "main": "index.js",
   "scripts": {},

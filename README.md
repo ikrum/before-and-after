@@ -6,27 +6,27 @@ Express package for response preprocessing, postprocessing. Include, exclude, fi
 
 # Usage
 
-By adding the middleware into your app you will get four underscore functions [` _before, _after, _exclude, _update` ] attached with res object.
+By adding the middleware into your app you will get four  functions [` before, after, exclude, update` ] attached with res object.
 ```
 var bafMiddleware = require('before-and-after');
 app.use(bafMiddleware);
 ```
 
-##Before tasks
+## Before tasks
 
 Before tasks will be executed before the response is delivered. Using before tasks you can dump your common tasks, pre-process and filter express response. 
 
-#### 1) _before
+#### 1) before
 
-Write your own preprocessing tasks by passing a call back into `res._before()`
+Write your own preprocessing tasks by passing a call back into `res.before()`
 ```
-res._before(function(){
+res.before(function(){
   console.log("Before response is sent");
 });
 ```
-#### 2) _exclude
+#### 2) exclude
 
-You may find difficulty with excluding mongoose fields. Filter your response by removing sensitive or unnecessary fields from response. All you need to pass the array of field or object path to the `_exclue()` function like following example.
+To exclude fileds from your response this function can be very useful. Filter your response by removing sensitive or unnecessary fields any time. All you need to pass the array of field or object path to the `_exclue()` function like following example.
 ```
 // Consider this is an example json
 var json = {
@@ -41,8 +41,8 @@ var json = {
 		secretField: "secret value",
 		info: {
 			title: "my title"
-		}
-	},
+        }
+    },
 	links : [
 		{
 			id: 34,
@@ -58,7 +58,7 @@ var json = {
 }
 
 
-res._exclude(['__id','__V', 'password', 'file.__id', 'file.secretField', 'links.$.source']);
+res.exclude(['__id','__V', 'password', 'file.__id', 'file.secretField', 'links.$.source']);
 ```
 To delete from array use `$` sign for iterator. The iterator will be replaced by the array index like:
 ```
@@ -70,18 +70,18 @@ links[i].source
 ```
 NOTE: For now only one iterator sign `$` is supported by this module. so ``'links.$.sources.$.type'`` won't work
 
-#### 3) _update
-To add new fields on the response or update existing fields you need to pass the object path and value to the _update function.
+#### 3) update
+To add new fields on the response or update existing fields you need to pass the object path and value to the update function.
 
 ```
 // add new field or update existing field
-res._update("token", getToken());
-res._update("data", {foo: "bar"});
+res.update("token", getToken());
+res.update("data", {foo: "bar"});
 
 // add or update field at all array elements
-res._update("links.$.newField", "new value");
+res.update("links.$.newField", "new value");
 ```
-NOTE: Like `_exclude` function, only one iterator sign `$` is supported by _update
+NOTE: Like `exclude` function, only one iterator sign `$` is supported by update
 
 ###### It's recommended to avoid nested before tasks. Before tasks should be defined before the request is already sent.
 
@@ -89,21 +89,21 @@ NOTE: Like `_exclude` function, only one iterator sign `$` is supported by _upda
 // don not use like this, bcoz by default all those three functions will be 
 // executed explicitly before the response is sent.
 
-res._before(function(){
-   res._update("foo", "bar");
-   res._exclude(["a","b","c"]);
+res.before(function(){
+   res.update("foo", "bar");
+   res.exclude(["a","b","c"]);
 })
 
 // The follwoing example won't work
 res.send("response already sent");
-res._exclude(['foo']);
+res.exclude(['foo']);
 ```
 
 ## After tasks
-If you need to do some tasks that need to be done after response is sent you can use the `_after()` function like the following example
+If you need to do some tasks that need to be done after response is sent you can use the `after()` function like the following example
 
 ```
-res._after(function(){
+res.after(function(){
   console.log("After response is already sent");
   cleanTrace(); // do some tasks
 });
@@ -113,13 +113,13 @@ res._after(function(){
 
 You can use before and after tasks multiple time. Each task you are adding will be executed explicitly in order.
 ```
-res._before(function(){}); 
-res._exclude['foo','bar'];
+res.before(function(){}); 
+res.exclude['foo','bar'];
 //...... your code here ...
 
 // use this again
-res._before(function(){ /* Another task here*/ })
-res._exclude['foo','bar'];.
+res.before(function(){ /* Another task here*/ })
+res.exclude['foo','bar'];.
 ```
 
 ### A complete example
@@ -133,18 +133,18 @@ For upload file request the example will accomplish the following tasks
 exports.uploadFile = function(req,res,next){
 
     // define your tasks
-    res._before(function(){
+    res.before(function(){
 		res.locals.variable = "some content"
     });
     
     // remove the temp file after everything is done
-    res._after(function(){
+    res.after(function(){
         fs.unlink(req.files.file.path, function(err){});
         // add more task you want
     });
 
     // add an example documentation field for error
-    res._update("documentation", "http://api.com/docs/1234");
+    res.update("documentation", "http://api.com/docs/1234");
 
     // On each error you don't have to remove the temp file
     // File will be remove by the after task
@@ -158,14 +158,14 @@ exports.uploadFile = function(req,res,next){
         if(error) return next(error);
 
         // error not happened, so delete the documentation field from response
-        res._exclude(['documentation']);
+        res.exclude(['documentation']);
 
         // insert response time
-        res._update('time', Date.now());
+        res.update('time', Date.now());
 
         // remove some fields from file info for the given json
         // {status:200, message: "string message", data: {resultOject}, time: time}
-        res._exclude(['data.__id', 'data.user.password', 'data.user.roles.$.accessKey']);
+        res.exclude(['data.__id', 'data.user.password', 'data.user.roles.$.accessKey']);
 
 
         // File will be remove by the after task
@@ -176,7 +176,7 @@ exports.uploadFile = function(req,res,next){
 
 ## Limitations
 
-You can use `._before` and `._after` function for the following response methods
+You can use `.before` and `.after` function for the following response methods
 
 * res.send(responseBody)
 * res.json(responseBody)
@@ -185,7 +185,7 @@ You can use `._before` and `._after` function for the following response methods
 * res.sendFile(responseBody)
 * res.render(responseBody)
 
-`._update` and `._exclude` is only for json response using: `res.json()` and `res.jsonp()`
+`.update` and `.exclude` is only for json response using: `res.json()` and `res.jsonp()`
 
 
 Feel free to contact me at: ikrum.bd@gmail.com
