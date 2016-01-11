@@ -51,6 +51,9 @@ module.exports = function(req,res,next){
 	
 
 	function exec_update_fields(jsonObj){
+		
+		jsonObj = JSON.parse(JSON.stringify(jsonObj));
+
 		for(var index in baf_update_fileds_){
 
 			// if the key has iterator $ sign 
@@ -81,6 +84,8 @@ module.exports = function(req,res,next){
 	}
 
 	function exec_exclude_paths(jsonObj){
+
+		jsonObj = JSON.parse(JSON.stringify(jsonObj));
 
 		for(var index in baf_exclude_paths_){
 
